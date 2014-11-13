@@ -5,6 +5,7 @@ AC_PREREQ([2.68])
 AC_INIT([json], [0.1], [hansvm.projects@gmail.com])
 AC_CONFIG_SRCDIR([src/main/JSON.cpp])
 AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -28,6 +29,11 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([
 	Makefile
 	src/main/Makefile
+	src/test/read/Makefile
+        src/test/tokens/Makefile
+        src/test/type_policy/Makefile
+        src/test/storage_policy/Makefile
+        src/test/input_buffer/Makefile
 ])
 
 AC_OUTPUT
