@@ -1,14 +1,32 @@
-# http://www.gnu.org/software/automake
+# Autotools generated files
 
-Makefile.in
-
-# http://www.gnu.org/software/autoconf
-
-/autom4te.cache
+/Makefile
+/Makefile.in
 /aclocal.m4
-/compile
+/autom4te.cache/
+/config.*
 /configure
 /depcomp
 /install-sh
+/libtool
+/ltmain.sh
+/m4/
 /missing
-/stamp-h1
+/stamp-h?
+
+# Autotools generated files in tests
+
+/src/test/**/Makefile
+/src/test/**/Makefile.in
+
+# Compiled test executables
+
+/src/test/**/*_test
+
+# Netbeans generated files
+
+
+
+# other files
+
+*.log
