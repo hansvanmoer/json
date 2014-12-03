@@ -9,42 +9,37 @@
 #define	JSONNUMBER_H
 
 #include <sstream>
-#include <algorithm>
 #include <stdexcept>
+#include <string>
 
 namespace JSON {
 
-    template<typename Flags> class TokenFlags{
-        Flags tokens[256];
+    template<typename Char, typename CharTraits> class NumberParser {
+    private:
+        
     public:
-        Flags(std::initializer_list<std::pair<int, Flags> > flags){
-            auto begin = flags.begin();
-            int prev = 0;
-            while(prev < 256 && begin != flags.end()){
-                int next = begin->first;
-                if(next < prev || next >= 256){
-                    std::ostringstream buf;
-                    buf << "invalid character in mask '" << next << "'";
-                    throw std::invalid_argument(buf.str());
-                }
-                for(int i = prev; i != next; ++i){
-                    tokens[i] = static_cast<Flags>(0);
-                }
-                tokens[next] = begin->second;
-                prev = next+1;
-            }
-            for(int i = prev; i != 256; ++i){
-                tokens[i] = static_cast<Flags>(0);
-            }
-        };
+        NumberParser(){};
         
-        bool test(int codePoint, Flags mask, Flags result){
-            return codePoint > 0 && codePoint < 256 && ((tokens[codePoint] & mask) == result);
+        template<typename Range> double parse(Range range){
+            std::ostringstream buffer;
+            while(range){
+                typename CharTraits::int_type value = CharTraits::to_int_type(*range);
+                if(Traits::number(value)){
+                    buffer.put(value);
+                }else{
+                    try{
+                        return std::stold(buffer.str());
+                    }catch(invalid_argument &e){
+                        
+                    }catch(out_of_range &e){
+                        
+                    }
+                }
+                ++range;
+            }
+            return parse();
         };
-        
-        bool test(int codePoint, Flags mask){
-            return codePoint > 0 && codePoint < 256 && (tokens[codePoint] & mask);
-        };
+
     };
 
 }
