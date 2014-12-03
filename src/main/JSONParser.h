@@ -8,7 +8,7 @@
 
 namespace JSON {
 
-    template<typename JSONTraits, typename Range, typename EventListener> class Parser {
+    template<typename JSONTraits, typename Range, typename Builder> class Parser {
     private:
 
         using Char = typename JSONTraits::Char;
@@ -27,15 +27,15 @@ namespace JSON {
         };
         
         Range input_;
-        EventListener &listener_;
+        Builder &builder_;
 
         Buffer id_;
         bool named_;
         const char *errorMessage_;
 
-        Parser(const Parser<JSONTraits, Range, EventListener> &) = delete;
+        Parser(const Parser<JSONTraits, Range, Builder> &) = delete;
 
-        Parser<JSONTraits, Range, EventListener> &operator=(const Parser<JSONTraits, Range, EventListener> &) = delete;
+        Parser<JSONTraits, Range, Builder> &operator=(const Parser<JSONTraits, Range, Builder> &) = delete;
        
         void raise(const char *msg){
             errorMessage_ = msg;
@@ -68,31 +68,31 @@ namespace JSON {
         
         void addString(Buffer value){
             if(named_){
-                listener_.string(id.begin(), id.end(), value.begin(), value.end());
+                builder_.string(id.begin(), id.end(), value.begin(), value.end());
             }else{
-                listener_.string(value.begin(), value.end());
+                builder_.string(value.begin(), value.end());
             }
         };
         
         void addNull(){
             if(named_){
-                listener_.null(id.begin(), id.end());
+                builder_.null(id.begin(), id.end());
             }else{
-                listener_.null();
+                builder_.null();
             }
         };
         
         void addBoolean(bool value){
             if(named_){
-                listener_.boolean(id.begin(), id.end(), value);
+                builder_.boolean(id.begin(), id.end(), value);
             }else{
-                listener_.boolean(value);
+                builder_.boolean(value);
             }
         };
         
         void addNumber(double value){
             if(named_){
-                listener_.number(id.begin(), id.end(), value);
+                builder_.number(id.begin(), id.end(), value);
             }else{
                 listener.number(value);
             }
@@ -100,31 +100,31 @@ namespace JSON {
         
         void beginObject(){
             if(named_){
-                listener_.beginObject(id.begin(), id.end());
+                builder_.beginObject(id.begin(), id.end());
             }else{
-                listener_.beginObject();
+                builder_.beginObject();
             }
         };
         
         void endObject(){
-            listener_.endObject();
+            builder_.endObject();
         };
         
         void beginArray(){
             if(named_){
-                listener_.beginArray(id.begin(), id.end());
+                builder_.beginArray(id.begin(), id.end());
             }else{
-                listener_.beginArray();
+                builder_.beginArray();
             }
         };
         
         void endArray(){
-            listener_.endArray();
+            builder_.endArray();
         };
         
     public:
 
-        Parser(Range input, EventListener &listener) : input_(input), listener_(listener), id_(), named_(false), errorMessage_() {
+        Parser(Range input, EventListener &listener) : input_(input), builder_(listener), id_(), named_(false), errorMessage_() {
         };
         
         void parse();

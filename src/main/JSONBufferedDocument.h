@@ -1,9 +1,13 @@
 #ifndef JSON_BUFFERED_DOCUMENT_H
 #define JSON_BUFFERED_DOCUMENT_H
 
-#include <list>
-
 #include "JSON.h"
+#include "JSONTraits.h"
+#include "JSONStoragePolicy.h"
+#include "JSONTypePolicy.h"
+
+#include <list>
+#include <unordered_map>
 
 namespace JSON {
 
@@ -258,6 +262,14 @@ namespace JSON {
         
         Node getRootNode() const{
             return Node{this, getNodeData()
+        };
+        
+        Node getNode(NodeId nodeId, String fieldName) const{
+            return Node{this, getNodeData(FieldId{nodeId, fieldName})};
+        };
+        
+        Node findNode(NodeId nodeId, String fieldName) const{
+            return Node{this, findNodeData(FieldId{nodeId, fieldName})};
         };
         
     };

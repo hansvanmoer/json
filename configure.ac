@@ -29,6 +29,7 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_FILES([
 	Makefile
 	src/main/Makefile
+        src/test/flags/Makefile
 	src/test/read/Makefile
         src/test/tokens/Makefile
         src/test/type_policy/Makefile

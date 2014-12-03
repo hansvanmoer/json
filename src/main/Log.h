@@ -12,7 +12,6 @@
 
 namespace Log {
 
-
     namespace _Private {
 
         using Yes = char;
@@ -25,8 +24,6 @@ namespace Log {
         public:
             template<typename T> Wrapper(T);
         };
-
-        
 
     }
     
