@@ -10,6 +10,32 @@ using namespace JSON::Tokens;
 
 using namespace std;
 
+void testInvalidInString(){
+    for(int i = 0; i < 0x1F; ++i){
+        std::ostringstream buffer;
+        buffer << "test for invalid tokens in string failed: " << i << "expected invalid, was valid";
+        Test::assertTrue(buffer.str(), JSON::Tokens::invalidInString(i));
+    }
+    
+    std::set<int> invalid{ {
+        '\"','\\', 0x7F
+    } };
+    
+    for(int i = 0x20; i < 0x80; ++i){
+        std::ostringstream buffer;
+        bool expected = (invalid.find(i) != invalid.end());
+        buffer << "test for invalid failed: " << i << "expected" << (expected ? "invalid but was valid" : "valid but was invlalid");
+        Test::assertTrue(buffer.str(), expected == JSON::Tokens::invalidInString(i));
+    }
+    for(int i = 0x80; i < 10000; ++i){
+        std::ostringstream buffer;
+        buffer << "test for invalid tokens in string failed: " << i << "expected valid, was invalid";
+        Test::assertTrue(buffer.str(), !JSON::Tokens::invalidInString(i));
+    }
+    
+    
+}
+
 void testWhitespace(){
     
     std::set<int> whitespace{ {
@@ -18,7 +44,7 @@ void testWhitespace(){
     
     for(int i = 0; i < 10000; ++i){
         std::ostringstream buffer;
-        buffer << "test for whitespace failed: " << std::ios::hex << i;
+        buffer << "test for whitespace failed: " << i;
         Test::assertTrue(buffer.str(), (whitespace.find(i) != whitespace.end()) == JSON::Tokens::whitespace(i));
     }
 }
@@ -88,6 +114,7 @@ void test(){
     testNumber();
     testEscape();
     testUnescape();
+    testInvalidInString();
 }
 
 TEST_MAIN("tokens",test);

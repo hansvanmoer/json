@@ -55,6 +55,8 @@ namespace JSON {
         int escape(int code);
 
         bool number(int code);
+        
+        bool invalidInString(int code);
     }
 
     enum class NodeType{
